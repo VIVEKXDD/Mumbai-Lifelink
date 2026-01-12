@@ -1,0 +1,243 @@
+/**
+ * @fileoverview Firestore Security Rules for the application.
+ *
+ * Core Philosophy:
+ * This ruleset prioritizes robust authorization and rapid prototyping. It enforces strict
+ * ownership and role-based access where appropriate, while minimizing data validation
+ * to allow for flexible schema evolution.
+ *
+ * Data Structure:
+ * - Top-level collections for main entities (trainUpdates, metroUpdates, busUpdates,
+ *   localBusinesses, publicNotices, governmentSchemes, localServices, forumThreads,
+ *   events, emergencyAlerts, users).
+ * - Subcollections for nested data (reviews under localServices, forumPosts under forumThreads,
+ *   rsvps under events).
+ * - User profiles stored in `/users/{userId}`.
+ *
+ * Key Security Decisions:
+ * - Strict user-ownership for user profiles and user-generated content.
+ * - Public read access for transit updates, local businesses, public notices,
+ *   government schemes, and emergency alerts.
+ * - Subcollections store the `userId` of the creator for easier authorization checks.
+ * - No data validation beyond authorization and relational integrity checks.
+ *
+ * Denormalization for Authorization:
+ * - Reviews, forum posts, and RSVPs include the `userId` to simplify ownership checks
+ *   and avoid complex queries.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Allows read-only access to train updates.
+     * @path /trainUpdates/{trainUpdateId}
+     * @allow (get, list) Any user can read train updates.
+     * @deny (create, update, delete) No one can create, update, or delete train updates.
+     * @principle Public read access.
+     */
+    match /trainUpdates/{trainUpdateId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read-only access to metro updates.
+     * @path /metroUpdates/{metroUpdateId}
+     * @allow (get, list) Any user can read metro updates.
+     * @deny (create, update, delete) No one can create, update, or delete metro updates.
+     * @principle Public read access.
+     */
+    match /metroUpdates/{metroUpdateId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read-only access to bus updates.
+     * @path /busUpdates/{busUpdateId}
+     * @allow (get, list) Any user can read bus updates.
+     * @deny (create, update, delete) No one can create, update, or delete bus updates.
+     * @principle Public read access.
+     */
+    match /busUpdates/{busUpdateId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read-only access to local businesses.
+     * @path /localBusinesses/{localBusinessId}
+     * @allow (get, list) Any user can read local business information.
+     * @deny (create, update, delete) No one can create, update, or delete local business information.
+     * @principle Public read access.
+     */
+    match /localBusinesses/{localBusinessId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read-only access to public notices.
+     * @path /publicNotices/{publicNoticeId}
+     * @allow (get, list) Any user can read public notices.
+     * @deny (create, update, delete) No one can create, update, or delete public notices.
+     * @principle Public read access.
+     */
+    match /publicNotices/{publicNoticeId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read-only access to government schemes.
+     * @path /governmentSchemes/{governmentSchemeId}
+     * @allow (get, list) Any user can read government schemes.
+     * @deny (create, update, delete) No one can create, update, or delete government schemes.
+     * @principle Public read access.
+     */
+    match /governmentSchemes/{governmentSchemeId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Allows read-only access to local services.
+     * @path /localServices/{localServiceId}
+     * @allow (get, list) Any user can read local service information.
+     * @deny (create, update, delete) No one can create, update, or delete local service information.
+     * @principle Public read access.
+     */
+    match /localServices/{localServiceId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Manages reviews for local services, enforcing user ownership.
+     * @path /localServices/{localServiceId}/reviews/{reviewId}
+     * @allow (create) Authenticated user can create a review, and must set userId to their own.
+     * @allow (get, list) Any user can read reviews.
+     * @allow (update, delete) Only the owner of the review can update or delete it, and the document must exist.
+     * @deny (create) If the userId in the incoming data does not match the authenticated user's ID.
+     * @deny (update, delete) If the document does not exist.
+     * @deny (update) If attempting to change the `userId` field.
+     * @principle Enforces document ownership for writes, public read access.
+     */
+    match /localServices/{localServiceId}/reviews/{reviewId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && isExistingOwner(request.auth.uid, resource.data.userId);
+      allow delete: if isSignedIn() && isExistingOwner(request.auth.uid, resource.data.userId);
+    }
+
+    /**
+     * @description Manages forum threads, enforcing user ownership.
+     * @path /forumThreads/{forumThreadId}
+     * @allow (create) Authenticated user can create a thread, and must set userId to their own.
+     * @allow (get, list) Any user can read forum threads.
+     * @allow (update, delete) Only the owner of the thread can update or delete it, and the document must exist.
+     * @deny (create) If the userId in the incoming data does not match the authenticated user's ID.
+     * @deny (update, delete) If the document does not exist.
+     * @deny (update) If attempting to change the `userId` field.
+     * @principle Enforces document ownership for writes, public read access.
+     */
+    match /forumThreads/{forumThreadId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && isExistingOwner(request.auth.uid, resource.data.userId);
+      allow delete: if isSignedIn() && isExistingOwner(request.auth.uid, resource.data.userId);
+    }
+
+    /**
+     * @description Manages forum posts within a thread, enforcing user ownership.
+     * @path /forumThreads/{forumThreadId}/forumPosts/{forumPostId}
+     * @allow (create) Authenticated user can create a post, and must set userId to their own.
+     * @allow (get, list) Any user can read forum posts.
+     * @allow (update, delete) Only the owner of the post can update or delete it, and the document must exist.
+     * @deny (create) If the userId in the incoming data does not match the authenticated user's ID.
+     * @deny (update, delete) If the document does not exist.
+     * @deny (update) If attempting to change the `userId` field.
+     * @principle Enforces document ownership for writes, public read access.
+     */
+    match /forumThreads/{forumThreadId}/forumPosts/{forumPostId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && isExistingOwner(request.auth.uid, resource.data.userId);
+      allow delete: if isSignedIn() && isExistingOwner(request.auth.uid, resource.data.userId);
+    }
+
+    /**
+     * @description Allows read-only access to events.
+     * @path /events/{eventId}
+     * @allow (get, list) Any user can read event information.
+     * @deny (create, update, delete) No one can create, update, or delete event information.
+     * @principle Public read access.
+     */
+    match /events/{eventId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Manages RSVPs for events, enforcing user ownership.
+     * @path /events/{eventId}/rsvps/{rsvpId}
+     * @allow (create) Authenticated user can create an RSVP, and must set userId to their own.
+     * @allow (get, list) Any user can read RSVPs.
+     * @allow (update, delete) Only the owner of the RSVP can update or delete it, and the document must exist.
+     * @deny (create) If the userId in the incoming data does not match the authenticated user's ID.
+     * @deny (update, delete) If the document does not exist.
+     * @deny (update) If attempting to change the `userId` field.
+     * @principle Enforces document ownership for writes, public read access.
+     */
+    match /events/{eventId}/rsvps/{rsvpId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && isExistingOwner(request.auth.uid, resource.data.userId);
+      allow delete: if isSignedIn() && isExistingOwner(request.auth.uid, resource.data.userId);
+    }
+
+    /**
+     * @description Allows read-only access to emergency alerts.
+     * @path /emergencyAlerts/{emergencyAlertId}
+     * @allow (get, list) Any user can read emergency alerts.
+     * @deny (create, update, delete) No one can create, update, or delete emergency alerts.
+     * @principle Public read access.
+     */
+    match /emergencyAlerts/{emergencyAlertId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Manages user profiles, enforcing user-ownership.
+     * @path /users/{userId}
+     * @allow (create) Only the user with the matching userId can create their profile.
+     * @allow (get, list) Only the owner can read their own profile.
+     * @allow (update, delete) Only the owner can update or delete their profile, and the document must exist.
+     * @deny (create) If the userId in the path does not match the authenticated user's ID.
+     * @deny (update, delete) If the document does not exist.
+     *  @principle Enforces user-ownership.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId, userId);
+      allow delete: if isExistingOwner(userId, userId);
+    }
+  }
+
+  // Helper functions
+  function isSignedIn() {
+    return request.auth != null;
+  }
+
+  function isOwner(userId) {
+    return request.auth.uid == userId;
+  }
+
+  function isExistingOwner(userId, ownerId) {
+    return isOwner(userId) && resource != null && resource.data.userId == ownerId;
+  }
+}

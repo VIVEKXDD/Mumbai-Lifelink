@@ -1,0 +1,76 @@
+{
+  "placeholderImages": [
+    {
+      "id": "plumber-1",
+      "description": "A professional plumber fixing a sink.",
+      "imageUrl": "https://images.unsplash.com/photo-1620838883342-ca19cf8448d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwbHVtYmVyJTIwd29ya2luZ3xlbnwwfHx8fDE3NTkyMzM3NjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "plumber working"
+    },
+    {
+      "id": "plumber-2",
+      "description": "A plumber with tools.",
+      "imageUrl": "https://images.unsplash.com/photo-1713527555117-85e0129fd90c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwbHVtYmVyJTIwdG9vbHN8ZW58MHx8fHwxNzU5MjYwNjIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "plumber tools"
+    },
+    {
+      "id": "electrician-1",
+      "description": "An electrician working on a circuit breaker.",
+      "imageUrl": "https://images.unsplash.com/photo-1564164494009-3876b2d197f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlbGVjdHJpY2lhbiUyMHBhbmVsfGVufDB8fHx8MTc1OTIxMjM2NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "electrician panel"
+    },
+    {
+      "id": "electrician-2",
+      "description": "An electrician installing a light fixture.",
+      "imageUrl": "https://images.unsplash.com/photo-1667922578520-61558e79aa7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2lhbiUyMGxpZ2h0fGVufDB8fHx8MTc1OTI2MDYyNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "electrician light"
+    },
+    {
+      "id": "doctor-1",
+      "description": "A friendly doctor with a stethoscope.",
+      "imageUrl": "https://images.unsplash.com/photo-1758127211629-81c0df0592cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxkb2N0b3IlMjBzbWlsaW5nfGVufDB8fHx8MTc1OTI0NjE3MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "doctor smiling"
+    },
+    {
+      "id": "doctor-2",
+      "description": "A doctor's clinic interior.",
+      "imageUrl": "https://images.unsplash.com/photo-1565647946321-a146ac24a220?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkb2N0b3IlMjBvZmZpY2V8ZW58MHx8fHwxNzU5MTc2NDc1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "doctor office"
+    },
+    {
+      "id": "tiffin-1",
+      "description": "A delicious looking tiffin box with various Indian dishes.",
+      "imageUrl": "https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxpbmRpYW4lMjBmb29kfGVufDB8fHx8MTc1OTIwMjUyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian food"
+    },
+    {
+      "id": "tiffin-2",
+      "description": "Stacks of tiffin carriers ready for delivery.",
+      "imageUrl": "https://images.unsplash.com/photo-1695654390723-479197a8c4a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmb29kJTIwZGVsaXZlcnl8ZW58MHx8fHwxNzU5MjUwMjU5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "food delivery"
+    },
+    {
+      "id": "map-mumbai",
+      "description": "A stylized map of Mumbai.",
+      "imageUrl": "https://images.unsplash.com/photo-1603466183710-70b84997a93f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjaXR5JTIwbWFwfGVufDB8fHx8MTc1OTE3MTkxN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city map"
+    },
+    {
+      "id": "event-music",
+      "description": "A live music concert.",
+      "imageUrl": "https://images.unsplash.com/photo-1656401992374-5ce15b9a11fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bXVzaWMlMjBjb25jZXJ0fGVufDB8fHx8MTc1OTIyODc4NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "music concert"
+    },
+    {
+      "id": "event-food",
+      "description": "A food festival.",
+      "imageUrl": "https://images.unsplash.com/photo-1705359573945-bcf2d0b70b0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmb29kJTIwZmVzdGl2YWx8ZW58MHx8fHwxNzU5MjI5NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "food festival"
+    },
+    {
+      "id": "event-art",
+      "description": "An art exhibition.",
+      "imageUrl": "https://images.unsplash.com/photo-1569783721854-33a99b4c0bae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhcnQlMjBnYWxsZXJ5fGVufDB8fHx8MTc1OTIyMTY5N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "art gallery"
+    }
+  ]
+}
